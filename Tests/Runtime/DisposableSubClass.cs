@@ -1,27 +1,26 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Extreal.Core.System.Test
 {
     public class DisposableSubClass : DisposableBase
     {
-        public List<int> List { get; }
-
         public MemoryStream Stream { get; }
+
+        public UnityWebRequest Uwr { get; }
 
         public DisposableSubClass()
         {
-            List = new List<int> { 0, 1, 2, 3, 4, 5 };
             Stream = new MemoryStream(65536);
+            Uwr = new UnityWebRequest();
         }
 
-        ~DisposableSubClass()
-            => Dispose(false);
-
-        protected override void FreeUnmanagedResources()
-            => Stream?.Dispose();
-
-        protected override void FreeManagedResources()
-            => List?.Clear();
+        protected override void FreeResources()
+        {
+            Debug.Log("Free Resources");
+            Stream?.Dispose();
+            Uwr?.Dispose();
+        }
     }
 }

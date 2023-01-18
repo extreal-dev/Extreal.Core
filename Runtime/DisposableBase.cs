@@ -6,28 +6,27 @@ namespace Extreal.Core.System
     {
         private bool isDisposed;
 
-        protected virtual void FreeUnmanagedResources() { }
-        protected virtual void FreeManagedResources() { }
+        protected abstract void FreeResources();
+
+        ~DisposableBase()
+        {
+            DisposeInternal();
+        }
 
         public void Dispose()
         {
-            Dispose(true);
+            DisposeInternal();
             GC.SuppressFinalize(this);
         }
 
-        protected void Dispose(bool disposing)
+        private void DisposeInternal()
         {
             if (isDisposed)
             {
                 return;
             }
 
-            FreeUnmanagedResources();
-            if (disposing)
-            {
-                FreeManagedResources();
-            }
-
+            FreeResources();
             isDisposed = true;
         }
     }
