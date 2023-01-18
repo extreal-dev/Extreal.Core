@@ -1,0 +1,10 @@
+{
+  "name": "jp.co.tis.extreal.core.system",
+  "version": "1.0.0",
+  "displayName": "Extreal.Core.System",
+  "unity": "2021.3",
+  "author": {
+    "name": "TIS Inc."
+  },
+  "dependencies": {}
+}

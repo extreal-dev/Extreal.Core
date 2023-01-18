@@ -1,0 +1,16 @@
+{
+    "name": "Extreal.Core.System",
+    "rootNamespace": "Extreal.Core.System",
+    "references": [
+        "Extreal.Framework.Analyzer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
