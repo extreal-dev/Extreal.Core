@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Extreal.Core.System.Test
+namespace Extreal.Core.Test
 {
     public class DisposableBaseTest
     {

@@ -1,6 +1,6 @@
 {
-    "name": "Extreal.Core.System",
-    "rootNamespace": "Extreal.Core.System",
+    "name": "Extreal.Core",
+    "rootNamespace": "Extreal.Core",
     "references": [
         "Extreal.Framework.Analyzer"
     ],

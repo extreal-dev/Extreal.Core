@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Extreal.Core.System.Test
+namespace Extreal.Core.Test
 {
     public class DisposableSubClass : DisposableBase
     {

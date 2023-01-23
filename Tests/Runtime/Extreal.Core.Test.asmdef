@@ -1,10 +1,10 @@
 {
-    "name": "Extreal.Core.System.Test",
-    "rootNamespace": "Extreal.Core.System.Test",
+    "name": "Extreal.Core.Test",
+    "rootNamespace": "Extreal.Core.Test",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Extreal.Core.System",
+        "Extreal.Core",
         "Extreal.Framework.Analyzer"
     ],
     "includePlatforms": [

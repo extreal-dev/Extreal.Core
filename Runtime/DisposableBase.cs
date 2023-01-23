@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Extreal.Core.System
+namespace Extreal.Core
 {
     /// <summary>
     /// Base class for classes with unmanaged resources.
