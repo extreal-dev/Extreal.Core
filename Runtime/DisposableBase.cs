@@ -2,10 +2,16 @@
 
 namespace Extreal.Core.System
 {
+    /// <summary>
+    /// Base class for classes with unmanaged resources.
+    /// </summary>
     public abstract class DisposableBase : IDisposable
     {
         private bool isDisposed;
 
+        /// <summary>
+        /// Releases unmanaged resources and disposes managed resources.
+        /// </summary>
         protected abstract void FreeResources();
 
         ~DisposableBase()
@@ -13,6 +19,9 @@ namespace Extreal.Core.System
             DisposeInternal();
         }
 
+        /// <summary>
+        /// Disposes this instance.
+        /// </summary>
         public void Dispose()
         {
             DisposeInternal();
