@@ -1,9 +1,7 @@
 {
     "name": "Extreal.Core",
     "rootNamespace": "Extreal.Core",
-    "references": [
-        "Extreal.Framework.Analyzer"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -4,8 +4,7 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Extreal.Core",
-        "Extreal.Framework.Analyzer"
+        "Extreal.Core"
     ],
     "includePlatforms": [
         "Editor"
