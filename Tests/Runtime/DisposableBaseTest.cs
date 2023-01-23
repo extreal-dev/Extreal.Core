@@ -61,6 +61,18 @@ namespace Extreal.Core.System.Test
             Application.logMessageReceived -= LogMessageReceivedHandler;
         }
 
+        [Test]
+        public void DisposeWithUsingStatement()
+        {
+            {
+                using var testClass = new DisposableSubClass();
+                Assert.AreEqual(0, testClass.Stream.Length);
+                Assert.IsFalse(testClass.Uwr.isDone);
+            }
+
+            LogAssert.Expect(LogType.Log, "Free Resources");
+        }
+
         private void LogMessageReceivedHandler(string condition, string stackTrace, LogType type)
                 => receivedLogText = condition;
     }
