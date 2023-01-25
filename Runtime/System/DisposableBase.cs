@@ -1,4 +1,7 @@
-﻿namespace Extreal.Core.Common.System
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Extreal.Core.Common.System
 {
     /// <summary>
     /// Base class that implements the Dispose pattern.
@@ -11,7 +14,7 @@
     /// https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
     /// </para>
     /// </remarks>
-    public class DisposableBase
+    public class DisposableBase : IDisposable
     {
         private readonly SafeDisposer safeDisposer;
 
@@ -33,6 +36,7 @@
         /// </summary>
         protected virtual void ReleaseUnmanagedResources() { }
 
+        [SuppressMessage("Usage", "CC0029")]
         public void Dispose() => safeDisposer.Dispose();
     }
 }
