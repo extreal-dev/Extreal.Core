@@ -1,10 +1,11 @@
 {
-    "name": "Extreal.Core.Test",
-    "rootNamespace": "Extreal.Core.Test",
+    "name": "Extreal.Core.Common.Test",
+    "rootNamespace": "Extreal.Core.Common.Test",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Extreal.Core"
+        "Extreal.Core.Logging",
+        "Extreal.Core.Common"
     ],
     "includePlatforms": [
         "Editor"

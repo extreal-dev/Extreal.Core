@@ -1,7 +1,10 @@
 {
-    "name": "Extreal.Core",
-    "rootNamespace": "Extreal.Core",
-    "references": [],
+    "name": "Extreal.Core.Common",
+    "rootNamespace": "Extreal.Core.Common",
+    "references": [
+        "GUID:b8d918b3ff5e05e4ba23a5c2512f52fe",
+        "GUID:9ea0cf1287a9c944c989c3cff60f15f3"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
