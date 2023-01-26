@@ -6,5 +6,7 @@
   "author": {
     "name": "TIS Inc."
   },
-  "dependencies": {}
+  "dependencies": {
+    "jp.co.tis.extreal.core.logging": "1.0.0"
+  }
 }
