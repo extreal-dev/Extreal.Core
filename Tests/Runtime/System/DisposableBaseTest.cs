@@ -47,7 +47,6 @@ namespace Extreal.Core.Common.System.Test
             yield return null;
 
             GC.Collect();
-            GC.WaitForPendingFinalizers();
             while (ClassWithUnmanaged.UnmanagedTimes == 0)
             {
                 yield return null;
@@ -73,7 +72,6 @@ namespace Extreal.Core.Common.System.Test
             yield return null;
 
             GC.Collect();
-            GC.WaitForPendingFinalizers();
             while (ClassWithUnmanaged.UnmanagedTimes == 0)
             {
                 yield return null;
@@ -108,7 +106,6 @@ namespace Extreal.Core.Common.System.Test
             yield return null;
 
             GC.Collect();
-            GC.WaitForPendingFinalizers();
             while (ClassWithUnmanaged.UnmanagedTimes == 0)
             {
                 yield return null;
@@ -127,7 +124,6 @@ namespace Extreal.Core.Common.System.Test
             yield return null;
 
             GC.Collect();
-            GC.WaitForPendingFinalizers();
             while (ClassWithUnmanaged.UnmanagedTimes == 0)
             {
                 yield return null;
@@ -164,7 +160,6 @@ namespace Extreal.Core.Common.System.Test
             yield return null;
 
             GC.Collect();
-            GC.WaitForPendingFinalizers();
             while (ClassWithManagedAndUnmanaged.UnmanagedTimes == 0)
             {
                 yield return null;
@@ -185,7 +180,6 @@ namespace Extreal.Core.Common.System.Test
             yield return null;
 
             GC.Collect();
-            GC.WaitForPendingFinalizers();
             while (ClassWithManagedAndUnmanaged.UnmanagedTimes == 0)
             {
                 yield return null;
