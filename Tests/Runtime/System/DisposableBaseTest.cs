@@ -62,13 +62,11 @@ namespace Extreal.Core.Common.System.Test
             // Managedが呼ばれないことをテストしたいため、
             // 確実ではありませんが待つためにUnmanagedを使用
             var sut1 = new ClassWithManaged();
-            var sut2 = new ClassWithUnmanaged();
+            _ = new ClassWithUnmanaged();
             sut1.Dispose();
-            sut2.Dispose();
             Assert.That(ClassWithManaged.ManagedTimes, Is.EqualTo(1));
-            Assert.That(ClassWithUnmanaged.UnmanagedTimes, Is.EqualTo(1));
+            Assert.That(ClassWithUnmanaged.UnmanagedTimes, Is.EqualTo(0));
             sut1 = null;
-            sut2 = null;
             yield return null;
 
             GC.Collect();
