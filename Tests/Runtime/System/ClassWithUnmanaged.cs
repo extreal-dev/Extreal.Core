@@ -6,6 +6,6 @@
 
         public static int UnmanagedTimes { get; private set; }
 
-        protected override void ReleaseUnmanagedResources() => ++UnmanagedTimes;
+        protected override void ReleaseUnmanagedResources() => UnmanagedTimes++;
     }
 }
