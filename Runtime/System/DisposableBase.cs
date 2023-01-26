@@ -19,7 +19,7 @@ namespace Extreal.Core.Common.System
         private readonly SafeDisposer safeDisposer;
 
         /// <summary>
-        /// Create a new DisposableBase.
+        /// Creates a new DisposableBase.
         /// </summary>
         protected DisposableBase()
             => safeDisposer = new SafeDisposer(this, ReleaseManagedResources, ReleaseUnmanagedResources);
@@ -27,12 +27,12 @@ namespace Extreal.Core.Common.System
         ~DisposableBase() => safeDisposer.DisposeByFinalizer();
 
         /// <summary>
-        /// Release managed resources.
+        /// Releases managed resources.
         /// </summary>
         protected virtual void ReleaseManagedResources() { }
 
         /// <summary>
-        /// Release unmanaged resources.
+        /// Releases unmanaged resources.
         /// </summary>
         protected virtual void ReleaseUnmanagedResources() { }
 

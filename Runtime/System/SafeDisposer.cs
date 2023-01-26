@@ -26,7 +26,7 @@ namespace Extreal.Core.Common.System
         private readonly Action releaseUnmanagedResources;
 
         /// <summary>
-        /// Create a new SafeDisposer.
+        /// Creates a new SafeDisposer.
         /// </summary>
         /// <param name="target">Target object to dispose.</param>
         /// <param name="releaseManagedResources">Process to release managed resources.</param>
@@ -47,12 +47,12 @@ namespace Extreal.Core.Common.System
         }
 
         /// <summary>
-        /// Dispose by Finalizer.
+        /// Disposes by Finalizer.
         /// </summary>
         public void DisposeByFinalizer() => Dispose(false);
 
         /// <summary>
-        /// Dispose.
+        /// Disposes.
         /// </summary>
         public void Dispose()
         {
