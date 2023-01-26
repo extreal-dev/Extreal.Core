@@ -29,8 +29,8 @@ namespace Extreal.Core.Common.System
         /// Creates a new SafeDisposer.
         /// </summary>
         /// <param name="target">Target object to dispose.</param>
-        /// <param name="releaseManagedResources">Process to release managed resources.</param>
-        /// <param name="releaseUnmanagedResources">Process to release unmanaged resources.</param>
+        /// <param name="releaseManagedResources">Processing to release managed resources.</param>
+        /// <param name="releaseUnmanagedResources">Processing to release unmanaged resources.</param>
         /// <exception cref="ArgumentException">If both releaseManagedResources and releaseUnmanagedResources are not specified.</exception>
         /// <exception cref="ArgumentNullException">If target is not specified.</exception>
         public SafeDisposer(object target, Action releaseManagedResources = null, Action releaseUnmanagedResources = null)
