@@ -5,7 +5,9 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Extreal.Core.Logging",
-        "Extreal.Core.Common"
+        "Extreal.Core.Common",
+        "UniTask",
+        "UniRx"
     ],
     "includePlatforms": [
         "Editor"
