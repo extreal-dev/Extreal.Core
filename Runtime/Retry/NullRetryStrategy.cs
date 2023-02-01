@@ -1,4 +1,6 @@
-﻿namespace Extreal.Core.Common.Retry
+﻿using System;
+
+namespace Extreal.Core.Common.Retry
 {
     public class NullRetryStrategy : IRetryStrategy
     {
@@ -6,6 +8,6 @@
 
         public bool HasNext() => false;
 
-        public void Wait() { }
+        public TimeSpan Next() => throw new InvalidOperationException("Unreachable");
     }
 }
