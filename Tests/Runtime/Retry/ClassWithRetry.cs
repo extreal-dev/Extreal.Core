@@ -11,13 +11,11 @@ namespace Extreal.Core.Common.Retry.Test
 
         private readonly int failureCount;
 
-        public int RunCount => runCount;
-        private int runCount;
+        public int RunCount { get; private set; }
 
-        public int ThrowCount => throwCount;
-        private int throwCount;
+        public int ThrowCount { get; private set; }
 
-        public void Reset() => runCount = throwCount = 0;
+        public void Reset() => RunCount = ThrowCount = 0;
 
         [SuppressMessage("Usage", "CC0057")]
         public ClassWithRetry(int failureCount) => this.failureCount = failureCount;
@@ -32,16 +30,16 @@ namespace Extreal.Core.Common.Retry.Test
 
         private string Run()
         {
-            runCount++;
+            RunCount++;
 
             if (Logger.IsDebug())
             {
-                Logger.LogDebug($"RUN runCount:{runCount} failureCount:{failureCount}");
+                Logger.LogDebug($"RUN runCount:{RunCount} failureCount:{failureCount}");
             }
 
-            if (failureCount != 0 && runCount <= failureCount)
+            if (failureCount != 0 && RunCount <= failureCount)
             {
-                throwCount++;
+                ThrowCount++;
                 throw new AccessViolationException("THROW RETRY TEST");
             }
             else
