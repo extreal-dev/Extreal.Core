@@ -20,15 +20,15 @@ namespace Extreal.Core.Common.Retry.Test
         [SuppressMessage("Usage", "CC0057")]
         public ClassWithRetry(int failureCount) => this.failureCount = failureCount;
 
-        public void RunAction() => Run();
+        public void RunAction(string value) => Run(value);
 
-        public async UniTask RunActionAsync() => await RunAsync();
+        public async UniTask RunActionAsync(string value) => await RunAsync(value);
 
-        public string RunFunc() => Run();
+        public string RunFunc(string value) => Run(value);
 
-        public async UniTask<string> RunFuncAsync() => await RunAsync();
+        public async UniTask<string> RunFuncAsync(string value) => await RunAsync(value);
 
-        private string Run()
+        private string Run(string value)
         {
             RunCount++;
 
@@ -44,12 +44,12 @@ namespace Extreal.Core.Common.Retry.Test
             }
             else
             {
-                return "RETURN RETRY TEST";
+                return value;
             }
         }
 
 #pragma warning disable CS1998
-        private async UniTask<string> RunAsync() => await UniTask.Create(async () => Run());
+        private async UniTask<string> RunAsync(string value) => await UniTask.Create(async () => Run(value));
 #pragma warning restore CS1998
     }
 }
