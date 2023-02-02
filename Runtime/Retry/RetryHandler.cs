@@ -58,7 +58,6 @@ namespace Extreal.Core.Common.Retry
                         }
                         catch (OperationCanceledException oce)
                         {
-                            LogException(e);
                             throw new OperationCanceledException("The retry was canceled", oce);
                         }
 
