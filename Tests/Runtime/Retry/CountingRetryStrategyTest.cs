@@ -14,7 +14,7 @@ namespace Extreal.Core.Common.Retry.Test
                     "Actual value was 0."));
 
         [Test]
-        public void MaxRetryCountIsTooBig() =>
+        public void MaxRetryCountIsTooLarge() =>
             Assert.That(() => new CountingRetryStrategy(21),
                 Throws.TypeOf<ArgumentOutOfRangeException>().With.Message.EqualTo(
                     "The default for nextRetryInterval is to use 20 Fibonacci numbers, so maxRetryCount must be less than or equal to 20. Alternatively, specify nextRetryInterval" +
