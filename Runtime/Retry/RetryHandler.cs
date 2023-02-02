@@ -25,14 +25,14 @@ namespace Extreal.Core.Common.Retry
         private readonly Func<Exception, bool> isRetryable;
         private readonly IRetryStrategy retryStrategy;
 
-        private static readonly IRetryStrategy NullRetryStrategy = new NullRetryStrategy();
+        private static readonly IRetryStrategy NoRetryStrategy = new NoRetryStrategy();
 
         private RetryHandler(
             Func<UniTask<TResult>> runAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
         {
             this.runAsync = runAsync ?? throw new ArgumentNullException(nameof(runAsync));
             this.isRetryable = isRetryable ?? throw new ArgumentNullException(nameof(isRetryable));
-            this.retryStrategy = retryStrategy ?? NullRetryStrategy;
+            this.retryStrategy = retryStrategy ?? NoRetryStrategy;
         }
 
         public async UniTask<TResult> HandleAsync(CancellationToken cancellationToken = default)
@@ -113,12 +113,12 @@ namespace Extreal.Core.Common.Retry
 
         [SuppressMessage("Usage", "CC0001")]
         public static RetryHandler<Unit> Of(
-            Func<UniTask> func, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
+            Func<UniTask> actionAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
         {
-            Func<UniTask<Unit>> runAsync = func != null
+            Func<UniTask<Unit>> runAsync = actionAsync != null
                 ? async () =>
                 {
-                    await func();
+                    await actionAsync();
                     return Unit.Default;
                 }
                 : null;

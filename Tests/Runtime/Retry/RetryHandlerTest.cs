@@ -18,7 +18,7 @@ namespace Extreal.Core.Common.Retry.Test
         public void OneTimeSetUp() => LoggingManager.Initialize(logLevel: LogLevel.Debug);
 
         [UnityTest]
-        public IEnumerator RunActionWithNullRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunActionWithNoRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
         {
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
@@ -36,7 +36,7 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator RunActionWithNullRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunActionWithNoRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
         {
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
@@ -217,7 +217,7 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator RunActionAsyncWithNullRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunActionAsyncWithNoRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
         {
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<Unit>.Of(target.RunActionAsync, e => e is AccessViolationException);
@@ -229,7 +229,7 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator RunActionAsyncWithNullRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunActionAsyncWithNoRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
         {
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(target.RunActionAsync, e => e is AccessViolationException);
@@ -297,7 +297,7 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator RunFuncWithNullRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunFuncWithNoRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
         {
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<string>.Of(target.RunFunc, e => e is AccessViolationException);
@@ -310,7 +310,7 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator RunFuncWithNullRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunFuncWithNoRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
         {
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(target.RunFunc, e => e is AccessViolationException);
@@ -377,7 +377,7 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator RunFuncAsyncWithNullRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunFuncAsyncWithNoRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
         {
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<string>.Of(target.RunFuncAsync, e => e is AccessViolationException);
@@ -390,7 +390,7 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator RunFuncAsyncWithNullRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
+        public IEnumerator RunFuncAsyncWithNoRetryStrategyForNoRecovery() => UniTask.ToCoroutine(async () =>
         {
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(target.RunFuncAsync, e => e is AccessViolationException);

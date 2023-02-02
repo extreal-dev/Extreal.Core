@@ -2,7 +2,7 @@
 
 namespace Extreal.Core.Common.Retry
 {
-    public class NullRetryStrategy : IRetryStrategy
+    public class NoRetryStrategy : IRetryStrategy
     {
         public void Reset() { }
 

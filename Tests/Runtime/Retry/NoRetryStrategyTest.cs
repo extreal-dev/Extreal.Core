@@ -3,12 +3,12 @@ using NUnit.Framework;
 
 namespace Extreal.Core.Common.Retry.Test
 {
-    public class NullRetryStrategyTest
+    public class NoRetryStrategyTest
     {
         [Test]
         public void InvalidUsage()
         {
-            var sut = new NullRetryStrategy();
+            var sut = new NoRetryStrategy();
             Assert.That(() => sut.Next(),
                 Throws.TypeOf<InvalidOperationException>().With.Message.EqualTo("Unreachable"));
         }
