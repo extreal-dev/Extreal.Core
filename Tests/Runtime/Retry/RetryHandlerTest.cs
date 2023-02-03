@@ -231,7 +231,7 @@ namespace Extreal.Core.Common.Retry.Test
             var retryStrategy = new CountingRetryStrategy(10);
             var target = new ClassWithRetry(10);
             using var sut = RetryHandler<Unit>.Of(
-                () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
+                () => target.RunAction(value), e => e is AccessViolationException, retryStrategy, cts.Token);
             using var disposable1 = sut.OnRetrying.Subscribe(retryCount =>
             {
                 onRetryingValues.Add(retryCount);
@@ -244,7 +244,7 @@ namespace Extreal.Core.Common.Retry.Test
 
             try
             {
-                await sut.HandleAsync(cts.Token);
+                await sut.HandleAsync();
             }
             catch (OperationCanceledException e)
             {
