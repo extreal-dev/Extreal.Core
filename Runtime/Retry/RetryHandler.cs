@@ -25,14 +25,12 @@ namespace Extreal.Core.Common.Retry
         private readonly Func<Exception, bool> isRetryable;
         private readonly IRetryStrategy retryStrategy;
 
-        private static readonly IRetryStrategy NoRetryStrategy = new NoRetryStrategy();
-
         private RetryHandler(
-            Func<UniTask<TResult>> runAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
+            Func<UniTask<TResult>> runAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy)
         {
             this.runAsync = runAsync ?? throw new ArgumentNullException(nameof(runAsync));
             this.isRetryable = isRetryable ?? throw new ArgumentNullException(nameof(isRetryable));
-            this.retryStrategy = retryStrategy ?? NoRetryStrategy;
+            this.retryStrategy = retryStrategy ?? throw new ArgumentNullException(nameof(retryStrategy));
         }
 
         public async UniTask<TResult> HandleAsync(CancellationToken cancellationToken = default)
@@ -96,7 +94,7 @@ namespace Extreal.Core.Common.Retry
 
         [SuppressMessage("Usage", "CC0001")]
         public static RetryHandler<Unit> Of(
-            Action action, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
+            Action action, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy)
         {
 #pragma warning disable CS1998
             Func<UniTask<Unit>> runAsync = action != null
@@ -112,7 +110,7 @@ namespace Extreal.Core.Common.Retry
 
         [SuppressMessage("Usage", "CC0001")]
         public static RetryHandler<Unit> Of(
-            Func<UniTask> actionAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
+            Func<UniTask> actionAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy)
         {
             Func<UniTask<Unit>> runAsync = actionAsync != null
                 ? async () =>
@@ -126,7 +124,7 @@ namespace Extreal.Core.Common.Retry
 
         [SuppressMessage("Usage", "CC0001")]
         public static RetryHandler<T> Of<T>(
-            Func<T> func, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
+            Func<T> func, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy)
         {
 #pragma warning disable CS1998
             Func<UniTask<T>> runAsync = func != null ? () => UniTask.Create(async () => func()) : null;
@@ -135,7 +133,7 @@ namespace Extreal.Core.Common.Retry
         }
 
         public static RetryHandler<T> Of<T>(
-            Func<UniTask<T>> funcAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy = null)
+            Func<UniTask<T>> funcAsync, Func<Exception, bool> isRetryable, IRetryStrategy retryStrategy)
             => new RetryHandler<T>(funcAsync, isRetryable, retryStrategy);
     }
 }

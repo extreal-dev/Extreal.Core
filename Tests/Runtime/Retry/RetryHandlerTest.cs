@@ -17,6 +17,24 @@ namespace Extreal.Core.Common.Retry.Test
         [OneTimeSetUp]
         public void OneTimeSetUp() => LoggingManager.Initialize(logLevel: LogLevel.Debug);
 
+        [Test]
+        public void RunAsyncIsNull() =>
+            Assert.That(() => RetryHandler<Unit>.Of(null, _ => false, new CountingRetryStrategy()),
+                Throws.TypeOf<ArgumentNullException>().With.Message.
+                    EqualTo($"Value cannot be null.{Environment.NewLine}Parameter name: runAsync"));
+
+        [Test]
+        public void IsRetryableIsNull() =>
+            Assert.That(() => RetryHandler<Unit>.Of(() => { }, null, new CountingRetryStrategy()),
+                Throws.TypeOf<ArgumentNullException>().With.Message.
+                    EqualTo($"Value cannot be null.{Environment.NewLine}Parameter name: isRetryable"));
+
+        [Test]
+        public void IsRetryStrategyIsNull() =>
+            Assert.That(() => RetryHandler<Unit>.Of(() => { }, _ => false, null),
+                Throws.TypeOf<ArgumentNullException>().With.Message.
+                    EqualTo($"Value cannot be null.{Environment.NewLine}Parameter name: retryStrategy"));
+
         [UnityTest]
         public IEnumerator RunActionWithNoRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
         {
@@ -24,8 +42,10 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(0);
-            using var sut = RetryHandler<Unit>.Of(() => target.RunAction(value), e => e is AccessViolationException);
+            using var sut = RetryHandler<Unit>.Of(
+                () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
             using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
 
@@ -44,8 +64,10 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(3);
-            using var sut = RetryHandler<Unit>.Of(() => target.RunAction(value), e => e is AccessViolationException);
+            using var sut = RetryHandler<Unit>.Of(
+                () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
             using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
 
@@ -71,7 +93,7 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
-            IRetryStrategy retryStrategy = new CountingRetryStrategy();
+            var retryStrategy = new CountingRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
@@ -93,7 +115,7 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(3);
+            var retryStrategy = new CountingRetryStrategy(3);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
@@ -115,7 +137,7 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(2);
+            var retryStrategy = new CountingRetryStrategy(2);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
@@ -144,7 +166,7 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(2);
+            var retryStrategy = new CountingRetryStrategy(2);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
@@ -206,7 +228,7 @@ namespace Extreal.Core.Common.Retry.Test
             using var cts = new CancellationTokenSource();
             var onRetryingValues = new List<int>();
             var isInvokeOnRetried = false;
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(10);
+            var retryStrategy = new CountingRetryStrategy(10);
             var target = new ClassWithRetry(10);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
@@ -240,9 +262,10 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<Unit>.Of(
-                async () => await target.RunActionAsync(value), e => e is AccessViolationException);
+                async () => await target.RunActionAsync(value), e => e is AccessViolationException, retryStrategy);
 
             await sut.HandleAsync();
 
@@ -255,9 +278,10 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
-                async () => await target.RunActionAsync(value), e => e is AccessViolationException);
+                async () => await target.RunActionAsync(value), e => e is AccessViolationException, retryStrategy);
 
             try
             {
@@ -277,7 +301,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy();
+            var retryStrategy = new CountingRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<Unit>.Of(
                 async () => await target.RunActionAsync(value), e => e is AccessViolationException, retryStrategy);
@@ -293,7 +317,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(3);
+            var retryStrategy = new CountingRetryStrategy(3);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 async () => await target.RunActionAsync(value), e => e is AccessViolationException, retryStrategy);
@@ -309,7 +333,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(2);
+            var retryStrategy = new CountingRetryStrategy(2);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 async () => await target.RunActionAsync(value), e => e is AccessViolationException, retryStrategy);
@@ -332,8 +356,10 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(0);
-            using var sut = RetryHandler<string>.Of(() => target.RunFunc(value), e => e is AccessViolationException);
+            using var sut = RetryHandler<string>.Of(
+                () => target.RunFunc(value), e => e is AccessViolationException, retryStrategy);
 
             var result = await sut.HandleAsync();
 
@@ -347,8 +373,10 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(3);
-            using var sut = RetryHandler<string>.Of(() => target.RunFunc(value), e => e is AccessViolationException);
+            using var sut = RetryHandler<string>.Of(
+                () => target.RunFunc(value), e => e is AccessViolationException, retryStrategy);
 
             try
             {
@@ -368,7 +396,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy();
+            var retryStrategy = new CountingRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<string>.Of(
                 () => target.RunFunc(value), e => e is AccessViolationException, retryStrategy);
@@ -385,7 +413,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(3);
+            var retryStrategy = new CountingRetryStrategy(3);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(
                 () => target.RunFunc(value), e => e is AccessViolationException, retryStrategy);
@@ -402,7 +430,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(2);
+            var retryStrategy = new CountingRetryStrategy(2);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(
                 () => target.RunFunc(value), e => e is AccessViolationException, retryStrategy);
@@ -425,9 +453,10 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<string>.Of(
-                async () => await target.RunFuncAsync(value), e => e is AccessViolationException);
+                async () => await target.RunFuncAsync(value), e => e is AccessViolationException, retryStrategy);
 
             var result = await sut.HandleAsync();
 
@@ -441,9 +470,10 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
+            var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(
-                async () => await target.RunFuncAsync(value), e => e is AccessViolationException);
+                async () => await target.RunFuncAsync(value), e => e is AccessViolationException, retryStrategy);
 
             try
             {
@@ -463,7 +493,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy();
+            var retryStrategy = new CountingRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<string>.Of(
                 async () => await target.RunFuncAsync(value), e => e is AccessViolationException, retryStrategy);
@@ -480,7 +510,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(3);
+            var retryStrategy = new CountingRetryStrategy(3);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(
                 async () => await target.RunFuncAsync(value), e => e is AccessViolationException, retryStrategy);
@@ -497,7 +527,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(2);
+            var retryStrategy = new CountingRetryStrategy(2);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(
                 async () => await target.RunFuncAsync(value), e => e is AccessViolationException, retryStrategy);
@@ -520,7 +550,7 @@ namespace Extreal.Core.Common.Retry.Test
         {
             const string value = "RETURN RETRY TEST";
 
-            IRetryStrategy retryStrategy = new CountingRetryStrategy(3);
+            var retryStrategy = new CountingRetryStrategy(3);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<string>.Of(
                 async () => await target.RunFuncAsync(value), e => e is AccessViolationException, retryStrategy);
