@@ -47,7 +47,7 @@ namespace Extreal.Core.Common.Retry
                 try
                 {
                     var result = await runAsync.Invoke();
-                    onRetried.OnNext(true);
+                    FireOnRetriedIfRetryStarted(retryCount, true);
                     return result;
                 }
                 catch (Exception e)
@@ -65,25 +65,42 @@ namespace Extreal.Core.Common.Retry
                         }
 
                         retryCount++;
-                        onRetrying.OnNext(retryCount);
-                        LogRetry(retryCount);
+                        FireOnRetrying(retryCount);
                     }
                     else
                     {
-                        onRetried.OnNext(false);
+                        FireOnRetriedIfRetryStarted(retryCount, false);
                         throw;
                     }
                 }
             }
         }
 
-        private void LogRetry(int retryCount)
+        private void FireOnRetrying(int retryCount)
         {
             if (Logger.IsDebug())
             {
-                Logger.LogDebug(
-                    $"retry: {retryCount} run: {runAsync} isRetryable: {isRetryable} retryStrategy: {retryStrategy}");
+                if (retryCount == 1)
+                {
+                    Logger.LogDebug(
+                        $"RETRY START: run:{runAsync.Method.Name} isRetryable:{isRetryable.Method.Name} retryStrategy:{retryStrategy}");
+                }
+                Logger.LogDebug($"RETRY: retryCount:{retryCount}");
             }
+            onRetrying.OnNext(retryCount);
+        }
+
+        private void FireOnRetriedIfRetryStarted(int retryCount, bool result)
+        {
+            if (retryCount == 0)
+            {
+                return;
+            }
+            if (Logger.IsDebug())
+            {
+                Logger.LogDebug($"RETRY FINISHED: result:{result}");
+            }
+            onRetried.OnNext(result);
         }
 
         private static void LogException(Exception e)

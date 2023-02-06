@@ -42,19 +42,25 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var isInvokeOnRetried = false;
             var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
-            using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
+            using var disposable2 = sut.OnRetried.Subscribe(result =>
+            {
+                isInvokeOnRetried = true;
+                onRetriedValue = result;
+            });
 
             await sut.HandleAsync();
 
             Assert.That(target.RunCount, Is.EqualTo(1));
             Assert.That(target.ThrowCount, Is.EqualTo(0));
             Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { }));
-            Assert.That(onRetriedValue, Is.EqualTo(true));
+            Assert.That(isInvokeOnRetried, Is.EqualTo(false));
+            Assert.That(onRetriedValue, Is.EqualTo(false));
         });
 
         [UnityTest]
@@ -64,12 +70,17 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var isInvokeOnRetried = false;
             var retryStrategy = new NoRetryStrategy();
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
-            using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
+            using var disposable2 = sut.OnRetried.Subscribe(result =>
+            {
+                isInvokeOnRetried = true;
+                onRetriedValue = result;
+            });
 
             try
             {
@@ -82,6 +93,7 @@ namespace Extreal.Core.Common.Retry.Test
                 Assert.That(target.RunCount, Is.EqualTo(1));
                 Assert.That(target.ThrowCount, Is.EqualTo(1));
                 Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { }));
+                Assert.That(isInvokeOnRetried, Is.EqualTo(false));
                 Assert.That(onRetriedValue, Is.EqualTo(false));
             }
         });
@@ -93,19 +105,25 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var isInvokeOnRetried = false;
             var retryStrategy = new CountingRetryStrategy();
             var target = new ClassWithRetry(0);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
-            using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
+            using var disposable2 = sut.OnRetried.Subscribe(result =>
+            {
+                isInvokeOnRetried = true;
+                onRetriedValue = result;
+            });
 
             await sut.HandleAsync();
 
             Assert.That(target.RunCount, Is.EqualTo(1));
             Assert.That(target.ThrowCount, Is.EqualTo(0));
             Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { }));
-            Assert.That(onRetriedValue, Is.EqualTo(true));
+            Assert.That(isInvokeOnRetried, Is.EqualTo(false));
+            Assert.That(onRetriedValue, Is.EqualTo(false));
         });
 
         [UnityTest]
@@ -115,18 +133,24 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var isInvokeOnRetried = false;
             var retryStrategy = new CountingRetryStrategy(3);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
-            using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
+            using var disposable2 = sut.OnRetried.Subscribe(result =>
+            {
+                isInvokeOnRetried = true;
+                onRetriedValue = result;
+            });
 
             await sut.HandleAsync();
 
             Assert.That(target.RunCount, Is.EqualTo(4));
             Assert.That(target.ThrowCount, Is.EqualTo(3));
             Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { 1, 2, 3 }));
+            Assert.That(isInvokeOnRetried, Is.EqualTo(true));
             Assert.That(onRetriedValue, Is.EqualTo(true));
         });
 
@@ -137,12 +161,17 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var isInvokeOnRetried = false;
             var retryStrategy = new CountingRetryStrategy(2);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
-            using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
+            using var disposable2 = sut.OnRetried.Subscribe(result =>
+            {
+                isInvokeOnRetried = true;
+                onRetriedValue = result;
+            });
 
             try
             {
@@ -155,6 +184,7 @@ namespace Extreal.Core.Common.Retry.Test
                 Assert.That(target.RunCount, Is.EqualTo(3));
                 Assert.That(target.ThrowCount, Is.EqualTo(3));
                 Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { 1, 2 }));
+                Assert.That(isInvokeOnRetried, Is.EqualTo(true));
                 Assert.That(onRetriedValue, Is.EqualTo(false));
             }
         });
@@ -166,12 +196,17 @@ namespace Extreal.Core.Common.Retry.Test
 
             var onRetryingValues = new List<int>();
             var onRetriedValue = false;
+            var isInvokeOnRetried = false;
             var retryStrategy = new CountingRetryStrategy(2);
             var target = new ClassWithRetry(3);
             using var sut = RetryHandler<Unit>.Of(
                 () => target.RunAction(value), e => e is AccessViolationException, retryStrategy);
             using var disposable1 = sut.OnRetrying.Subscribe(onRetryingValues.Add);
-            using var disposable2 = sut.OnRetried.Subscribe(result => onRetriedValue = result);
+            using var disposable2 = sut.OnRetried.Subscribe(result =>
+            {
+                isInvokeOnRetried = true;
+                onRetriedValue = result;
+            });
 
             try
             {
@@ -184,6 +219,7 @@ namespace Extreal.Core.Common.Retry.Test
                 Assert.That(target.RunCount, Is.EqualTo(3));
                 Assert.That(target.ThrowCount, Is.EqualTo(3));
                 Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { 1, 2 }));
+                Assert.That(isInvokeOnRetried, Is.EqualTo(true));
                 Assert.That(onRetriedValue, Is.EqualTo(false));
             }
 
@@ -200,6 +236,7 @@ namespace Extreal.Core.Common.Retry.Test
                 Assert.That(target.RunCount, Is.EqualTo(3));
                 Assert.That(target.ThrowCount, Is.EqualTo(3));
                 Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { 1, 2, 1, 2 }));
+                Assert.That(isInvokeOnRetried, Is.EqualTo(true));
                 Assert.That(onRetriedValue, Is.EqualTo(false));
             }
 
@@ -216,6 +253,7 @@ namespace Extreal.Core.Common.Retry.Test
                 Assert.That(target.RunCount, Is.EqualTo(3));
                 Assert.That(target.ThrowCount, Is.EqualTo(3));
                 Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { 1, 2, 1, 2, 1, 2 }));
+                Assert.That(isInvokeOnRetried, Is.EqualTo(true));
                 Assert.That(onRetriedValue, Is.EqualTo(false));
             }
         });
