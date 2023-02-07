@@ -38,8 +38,9 @@ namespace Extreal.Core.Common.Retry
             this.cancellationToken = cancellationToken;
         }
 
-        public async UniTask<TResult> HandleAsync()
+        public async UniTask<TResult> HandleAsync(CancellationToken? overrideCancellationToken = null)
         {
+            var retryCancellationToken = overrideCancellationToken ?? cancellationToken;
             var retryCount = 0;
             retryStrategy.Reset();
             while (true)
@@ -57,7 +58,7 @@ namespace Extreal.Core.Common.Retry
                     {
                         try
                         {
-                            await UniTask.Delay(retryStrategy.Next(), cancellationToken: cancellationToken);
+                            await UniTask.Delay(retryStrategy.Next(), cancellationToken: retryCancellationToken);
                         }
                         catch (OperationCanceledException oce)
                         {
