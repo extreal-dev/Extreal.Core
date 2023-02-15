@@ -8,7 +8,7 @@ namespace Extreal.Core.Common.Retry.Test
         [Test]
         public void InvalidUsage()
         {
-            var sut = new NoRetryStrategy();
+            var sut = NoRetryStrategy.Instance;
             Assert.That(() => sut.Next(),
                 Throws.TypeOf<InvalidOperationException>().With.Message.EqualTo("Unreachable"));
         }
