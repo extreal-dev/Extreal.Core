@@ -296,48 +296,6 @@ namespace Extreal.Core.Common.Retry.Test
         });
 
         [UnityTest]
-        public IEnumerator CancelForOverride() => UniTask.ToCoroutine(async () =>
-        {
-            const string value = "RETURN RETRY TEST";
-
-            using var cts = new CancellationTokenSource();
-            using var overrideCts = new CancellationTokenSource();
-            var onRetryingValues = new List<int>();
-            var isInvokeOnRetried = false;
-            var retryStrategy = new CountingRetryStrategy(10);
-            var target = new ClassWithRetry(10);
-            using var sut = RetryHandler<Unit>.Of(
-                () => target.RunAction(value), e => e is AccessViolationException, retryStrategy, cts.Token);
-            using var disposable1 = sut.OnRetrying.Subscribe(retryCount =>
-            {
-                onRetryingValues.Add(retryCount);
-                if (retryCount == 1)
-                {
-                    cts.Cancel();
-                }
-                if (retryCount == 4)
-                {
-                    overrideCts.Cancel();
-                }
-            });
-            using var disposable2 = sut.OnRetried.Subscribe(_ => isInvokeOnRetried = true);
-
-            try
-            {
-                await sut.HandleAsync(overrideCts.Token);
-            }
-            catch (OperationCanceledException e)
-            {
-                Logger.LogDebug("check inner exception", e);
-                Assert.That(e.Message, Is.EqualTo("The retry was canceled"));
-                Assert.That(target.RunCount, Is.EqualTo(5));
-                Assert.That(target.ThrowCount, Is.EqualTo(5));
-                Assert.That(onRetryingValues.ToArray(), Is.EqualTo(new int[] { 1, 2, 3, 4 }));
-                Assert.That(isInvokeOnRetried, Is.EqualTo(false));
-            }
-        });
-
-        [UnityTest]
         public IEnumerator RunActionAsyncWithNoRetryStrategyForNoException() => UniTask.ToCoroutine(async () =>
         {
             const string value = "RETURN RETRY TEST";
