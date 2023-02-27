@@ -11,7 +11,7 @@ namespace Extreal.Core.Common.Retry
         /// Resets retry status.
         /// </summary>
         /// <remarks>
-        /// Reset is called when the retry process is repeated.
+        /// Reset is called when the retry processing is repeated.
         /// </remarks>
         void Reset();
 
@@ -22,7 +22,7 @@ namespace Extreal.Core.Common.Retry
         bool HasNext();
 
         /// <summary>
-        /// Get the retry interval.
+        /// Gets the retry interval.
         /// </summary>
         /// <returns>The retry interval.</returns>
         TimeSpan Next();

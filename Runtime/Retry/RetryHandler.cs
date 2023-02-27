@@ -54,7 +54,7 @@ namespace Extreal.Core.Common.Retry
         /// Runs a target method for retry.
         /// </summary>
         /// <returns>Result of retry target method</returns>
-        /// <exception cref="OperationCanceledException">If the retry process is canceled.</exception>
+        /// <exception cref="OperationCanceledException">If the retry processing is canceled.</exception>
         public async UniTask<TResult> HandleAsync()
         {
             var retryCount = 0;
@@ -138,7 +138,7 @@ namespace Extreal.Core.Common.Retry
         /// <param name="isRetryable">Processing used to determine retry.</param>
         /// <param name="retryStrategy">Strategy to control retry processing.</param>
         /// <param name="cancellationToken">Token used to cancel retry.</param>
-        /// <returns>None</returns>
+        /// <returns>RetryHandler</returns>
         [SuppressMessage("Usage", "CC0001")]
         public static RetryHandler<Unit> Of(
             Action action, Func<Exception, bool> isRetryable,
@@ -163,7 +163,7 @@ namespace Extreal.Core.Common.Retry
         /// <param name="isRetryable">Processing used to determine retry.</param>
         /// <param name="retryStrategy">Strategy to control retry processing.</param>
         /// <param name="cancellationToken">Token used to cancel retry.</param>
-        /// <returns>None</returns>
+        /// <returns>RetryHandler</returns>
         [SuppressMessage("Usage", "CC0001")]
         public static RetryHandler<Unit> Of(
             Func<UniTask> actionAsync, Func<Exception, bool> isRetryable,
@@ -187,7 +187,7 @@ namespace Extreal.Core.Common.Retry
         /// <param name="retryStrategy">Strategy to control retry processing.</param>
         /// <param name="cancellationToken">Token used to cancel retry.</param>
         /// <typeparam name="T">Result of retry target method</typeparam>
-        /// <returns>Result of retry target method</returns>
+        /// <returns>RetryHandler</returns>
         [SuppressMessage("Usage", "CC0001")]
         public static RetryHandler<T> Of<T>(
             Func<T> func, Func<Exception, bool> isRetryable,
@@ -207,7 +207,7 @@ namespace Extreal.Core.Common.Retry
         /// <param name="retryStrategy">Strategy to control retry processing.</param>
         /// <param name="cancellationToken">Token used to cancel retry.</param>
         /// <typeparam name="T">Result of retry target method</typeparam>
-        /// <returns>Result of retry target method</returns>
+        /// <returns>RetryHandler</returns>
         public static RetryHandler<T> Of<T>(
             Func<UniTask<T>> funcAsync, Func<Exception, bool> isRetryable,
             IRetryStrategy retryStrategy, CancellationToken cancellationToken = default)
