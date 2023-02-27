@@ -63,7 +63,7 @@ namespace Extreal.Core.Common.Retry
             {
                 try
                 {
-                    var result = await runAsync.Invoke();
+                    var result = await runAsync();
                     FireOnRetriedIfRetryStarted(retryCount, true);
                     return result;
                 }
