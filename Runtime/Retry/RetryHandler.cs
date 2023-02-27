@@ -169,13 +169,15 @@ namespace Extreal.Core.Common.Retry
             Func<UniTask> actionAsync, Func<Exception, bool> isRetryable,
             IRetryStrategy retryStrategy, CancellationToken cancellationToken = default)
         {
-            Func<UniTask<Unit>> runAsync = actionAsync != null
-                ? async () =>
+            Func<UniTask<Unit>> runAsync = null;
+            if (actionAsync != null)
+            {
+                runAsync = async () =>
                 {
                     await actionAsync();
                     return Unit.Default;
-                }
-                : null;
+                };
+            }
             return new RetryHandler<Unit>(runAsync, isRetryable, retryStrategy, cancellationToken);
         }
 
