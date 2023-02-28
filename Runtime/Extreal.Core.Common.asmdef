@@ -2,7 +2,9 @@
     "name": "Extreal.Core.Common",
     "rootNamespace": "Extreal.Core.Common",
     "references": [
-        "Extreal.Core.Logging"
+        "Extreal.Core.Logging",
+        "UniTask",
+        "UniRx"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
