@@ -62,22 +62,25 @@ namespace Extreal.Core.Common.System
 
         private void Dispose(bool disposing)
         {
-            if (Logger.IsDebug())
-            {
-                Logger.LogDebug($"target: {target.GetType().FullName} disposing: {disposing} isDisposed: {isDisposed}");
-            }
-
             if (isDisposed)
             {
                 return;
             }
 
+            if (Logger.IsDebug())
+            {
+                Logger.LogDebug($"Dispose {target.GetType().Name}");
+            }
+
             if (disposing)
             {
                 releaseManagedResources?.Invoke();
+                releaseUnmanagedResources?.Invoke();
             }
-
-            releaseUnmanagedResources?.Invoke();
+            else
+            {
+                releaseUnmanagedResources?.Invoke();
+            }
             isDisposed = true;
         }
     }
