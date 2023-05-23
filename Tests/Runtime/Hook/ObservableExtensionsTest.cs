@@ -35,19 +35,16 @@ namespace Extreal.Core.Common.Test.Tests.Runtime.Hook
         public void Hook()
         {
             var total = 0;
-            var hookTotal = 0;
 
             var point = new ReactiveProperty<int>(0).AddTo(disposables);
-            Action<int> onNext = i => total += i;
-            Action<int> hook = _ => hookTotal += 1;
-            point.Hook(hook).Subscribe(onNext).AddTo(disposables);
+            Action<int> hook = value => total += value;
+            point.Hook(hook).AddTo(disposables);
 
             point.Value = 1;
             point.Value = 2;
             point.Value = 3;
 
             Assert.That(total, Is.EqualTo(6));
-            Assert.That(hookTotal, Is.EqualTo(4));
         }
 
         [Test]
@@ -58,9 +55,10 @@ namespace Extreal.Core.Common.Test.Tests.Runtime.Hook
             var total = 0;
 
             var point = new ReactiveProperty<int>(0).AddTo(disposables);
-            Action<int> onNext = i => total += i;
+            Action<int> onNext = value => total += value;
             Action<int> hook = _ => throw new Exception("HOOK ERROR");
-            point.Hook(hook).Subscribe(onNext).AddTo(disposables);
+            point.Subscribe(onNext).AddTo(disposables);
+            point.Hook(hook).AddTo(disposables);
 
             point.Value = 1;
             point.Value = 2;

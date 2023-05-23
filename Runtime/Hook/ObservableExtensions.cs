@@ -12,32 +12,32 @@ namespace Extreal.Core.Common.Hook
         private static readonly ELogger Logger = LoggingManager.GetLogger(nameof(ObservableExtensions));
 
         /// <summary>
-        /// Hooks the subscription.
+        /// Hooks a notification.
         /// </summary>
         /// <remarks>
-        /// Hook should be implemented in such a way that no exceptions are raised.
-        /// To avoid affecting the processing of Subscribe, if an exception is raised by the hook, nothing is processed.
+        /// The hook must be implemented in such a way that no exception is raised.
+        /// If an exception is raised by the hook, nothing is done because it does not affect the processing of other Subscribers.
         /// </remarks>
         /// <param name="source">Observable</param>
         /// <param name="hook">Processing for hook</param>
         /// <typeparam name="T">Type of value to be notified</typeparam>
         /// <returns>Observable</returns>
         /// <exception cref="ArgumentNullException">If hook is null</exception>
-        public static IObservable<T> Hook<T>(this IObservable<T> source, Action<T> hook)
+        public static IDisposable Hook<T>(this IObservable<T> source, Action<T> hook)
         {
             if (hook == null)
             {
                 throw new ArgumentNullException(nameof(hook));
             }
 
-            return source.Do(obj => InvokeHookSafely(hook, obj));
+            return source.Subscribe(value => InvokeHookSafely(hook, value));
         }
 
-        private static void InvokeHookSafely<T>(Action<T> hook, T obj)
+        private static void InvokeHookSafely<T>(Action<T> hook, T value)
         {
             try
             {
-                hook.Invoke(obj);
+                hook.Invoke(value);
             }
             catch (Exception e)
             {
