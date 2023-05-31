@@ -43,7 +43,8 @@ namespace Extreal.Core.Common.Hook
             {
                 if (Logger.IsDebug())
                 {
-                    Logger.LogDebug("Error occurred on hook", e);
+                    // Output the log at the Error level so that the developer is aware of the error during development.
+                    Logger.LogError("Error occurred on hook", e);
                 }
             }
         }

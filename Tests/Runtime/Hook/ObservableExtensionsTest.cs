@@ -7,7 +7,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Extreal.Core.Common.Test.Tests.Runtime.Hook
+namespace Extreal.Core.Common.Hook.Test
 {
     public class ObservableExtensionsTest
     {
@@ -50,7 +50,8 @@ namespace Extreal.Core.Common.Test.Tests.Runtime.Hook
         [Test]
         public void ExceptionOccurredOnHook()
         {
-            LogAssert.Expect(LogType.Log, new Regex(".*Error occurred on hook.*"));
+            LogAssert.ignoreFailingMessages = true;
+            LogAssert.Expect(LogType.Error, new Regex(".*Error occurred on hook.*"));
 
             var total = 0;
 
