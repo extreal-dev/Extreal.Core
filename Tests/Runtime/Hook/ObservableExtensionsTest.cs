@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Extreal.Core.Common.Hook;
 using Extreal.Core.Logging;
 using NUnit.Framework;
 using UniRx;
@@ -51,7 +50,7 @@ namespace Extreal.Core.Common.Hook.Test
         public void ExceptionOccurredOnHook()
         {
             LogAssert.ignoreFailingMessages = true;
-            LogAssert.Expect(LogType.Error, new Regex(".*Error occurred on hook.*"));
+            LogAssert.Expect(LogType.Error, new Regex(".*Error has occurred on hook.*"));
 
             var total = 0;
 
