@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "jp.co.tis.extreal.core.logging": "1.2.0",
-    "com.cysharp.unitask": "2.3.3",
+    "com.cysharp.unitask": "2.5.0",
     "com.neuecc.unirx": "7.1.0"
   }
 }
